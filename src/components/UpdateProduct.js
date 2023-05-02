@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const UpdateProduct = () => {
   const [name, setName] = React.useState("");
@@ -7,7 +7,7 @@ const UpdateProduct = () => {
   const [category, setCategory] = React.useState("");
   const [company, setCompany] = React.useState("");
   const params = useParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     getProductDetail();
@@ -15,7 +15,11 @@ const UpdateProduct = () => {
 
   const getProductDetail = async () => {
     console.log(params);
-    let result = await fetch(`http://localhost:5000/product/${params.id}`);
+    let result = await fetch(`http://localhost:5000/product/${params.id}`, {
+      headers: {
+        authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
+      },
+    });
     result = await result.json();
     setName(result.name);
     setPrice(result.price);
@@ -30,11 +34,12 @@ const UpdateProduct = () => {
       body: JSON.stringify({ name, price, category, company }),
       headers: {
         "Content-Type": "application/json",
+        authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
       },
     });
     result = await result.json();
     console.warn(result);
-    navigate('/')
+    navigate("/");
   };
 
   return (

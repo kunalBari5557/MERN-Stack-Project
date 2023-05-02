@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AddProduct = () => {
   const [name, setName] = React.useState("");
@@ -6,6 +7,7 @@ const AddProduct = () => {
   const [category, setCategory] = React.useState("");
   const [company, setCompany] = React.useState("");
   const [error, setError] = React.useState(false);
+  const navigate = useNavigate();
 
   const addProduct = async () => {
     console.log(name, price, category, company);
@@ -20,10 +22,12 @@ const AddProduct = () => {
       body: JSON.stringify({ name, price, category, company, userId }),
       headers: {
         "Content-Type": "application/json",
+        authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
       },
     });
     result = await result.json();
     console.log(result);
+    navigate("/");
   };
 
   return (
@@ -38,7 +42,9 @@ const AddProduct = () => {
           setName(e.target.value);
         }}
       />
-      {error && !name && <span className="invalid-input">Enter valid name</span>}
+      {error && !name && (
+        <span className="invalid-input">Enter valid name</span>
+      )}
       <input
         type="text"
         className="inputBox"
@@ -48,7 +54,9 @@ const AddProduct = () => {
           setPrice(e.target.value);
         }}
       />
-      {error && !price && <span className="invalid-input">Enter valid Price</span>}
+      {error && !price && (
+        <span className="invalid-input">Enter valid Price</span>
+      )}
 
       <input
         type="text"
@@ -59,7 +67,9 @@ const AddProduct = () => {
           setCategory(e.target.value);
         }}
       />
-      {error && !category && <span className="invalid-input">Enter valid Category</span>}
+      {error && !category && (
+        <span className="invalid-input">Enter valid Category</span>
+      )}
 
       <input
         type="text"
@@ -70,7 +80,9 @@ const AddProduct = () => {
           setCompany(e.target.value);
         }}
       />
-      {error && !company && <span className="invalid-input">Enter valid Company</span>}
+      {error && !company && (
+        <span className="invalid-input">Enter valid Company</span>
+      )}
 
       <button onClick={addProduct} className="button">
         Add Product
